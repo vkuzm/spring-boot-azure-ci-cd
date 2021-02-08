@@ -37,18 +37,17 @@ stages:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
           goals: 'package -Dmaven.test.skip=true'
-      
+  
       - task: CopyFiles@2
-        displayName: 'Copy files'
+        displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
         inputs:
-          SourceFolder: '$(System.DefaultWorkingDirectory)'
-          Contents: '**/target/*.?(war|jar)'
-          TargetFolder: '$(Build.ArtifactStagingDirectory)'
-          cleanTargetFolder: true
-      
+          SourceFolder: '$(system.defaultworkingdirectory)'
+          Contents: '**/*.jar'
+          TargetFolder: '$(build.artifactstagingdirectory)'
+        condition: succeededOrFailed()
+
       - task: PublishBuildArtifacts@1
-        displayName: 'Publish app'
+        displayName: 'Publish Artifact: drop'
         inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          ArtifactName: 'drop'
-          publishLocation: 'Container'
+          PathtoPublish: '$(build.artifactstagingdirectory)'
+        condition: succeededOrFailed()
