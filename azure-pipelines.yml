@@ -1,0 +1,54 @@
+
+trigger:
+  batch: false
+  branches:
+    include:
+      - main
+      - master
+
+variables:
+  mavenPomFile: 'pom.xml'
+  jdkVersion: '1.11'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: test
+  jobs:
+  - job: run_tests_job
+    steps:
+      - task: Maven@3
+        inputs:
+          mavenPomFile: $(mavenPomFile)
+          jdkVersionOption: $(jdkVersion)
+          goals: 'test'
+
+
+- stage: build_and_publish
+  # Run this stage if previous stage(s) succeeded and build reason ISN'T a pull request
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+  jobs:
+  - job: build_and_publish_job
+    continueOnError: 'false'
+    steps:
+      - task: Maven@3
+        inputs:
+          mavenPomFile: $(mavenPomFile)
+          jdkVersionOption: $(jdkVersion)
+          goals: 'package -Dmaven.test.skip=true'
+      
+      - task: CopyFiles@2
+        displayName: 'Copy files'
+        inputs:
+          SourceFolder: '$(System.DefaultWorkingDirectory)'
+          Contents: '**/target/*.?(war|jar)'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+          cleanTargetFolder: true
+      
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish app'
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'drop'
+          publishLocation: 'Container'
