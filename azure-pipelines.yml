@@ -9,6 +9,9 @@ trigger:
 variables:
   mavenPomFile: 'pom.xml'
   jdkVersion: '1.11'
+  dockerRegistry: 'azurespringbootcontainertest.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -47,15 +50,15 @@ stages:
   
       #2 Build the container and push to the registry
       - task: Docker@2
-        displayName: Build and push image to container registry
+        displayName: Build and push an image to container registry
         inputs:
           command: buildAndPush
-          repository: demos/springbootapp
-          #dockerfile: '**/dockerfile'
-          containerRegistry: AzureContainerRegistry
+          repository: $(imageRepository)
+          dockerfile: $(dockerfilePath)
+          containerRegistry: $(dockerRegistry)
+          buildContext: '.'
           tags: |
-            $(Build.BuildId)
-            latest
+            $(tag)
 
       #3 Deploy the container
       # - task: PublishBuildArtifacts@1
