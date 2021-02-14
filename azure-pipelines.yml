@@ -23,30 +23,13 @@ stages:
   - job: run_tests_job
     steps:
 
-      #1 Run tests
+      #1 Run tests and analyze code by SonarCloud
       - task: Maven@3
         inputs:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
-          goals: 'test'
+          goals: 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
       
-      #2 Config SonarCloud
-      - task: SonarCloudPrepare@1
-        inputs:
-          SonarCloud: 'azure-springboot'
-          organization: 'vkuzm'
-          scannerMode: 'Other'
-          extraProperties: |
-                sonar.projectKey=vkuzm_spring-boot-github-ci-cd
-          
-      #3 Analyze the project by SonarCloud
-      - task: SonarCloudAnalyze@1
-
-      #4 Publish results to SonarCloud
-      - task: SonarCloudPublish@1
-        inputs:
-          pollingTimeoutSec: '300'
-
 
 - stage: build_and_publish
   dependsOn: test
