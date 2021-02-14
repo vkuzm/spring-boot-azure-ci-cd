@@ -10,7 +10,7 @@ variables:
   mavenPomFile: 'pom.xml'
   jdkVersion: '1.11'
   applicationName: 'azure-spring-boot-ci-cd'
-  azureSubscriptionName: 'Azure subscription 1'
+  azureSubscriptionName: 'azure-subscription-1'
   dockerRegistry: 'azurespringbootcontainertest'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   imageRepository: 'springbootapp'
@@ -77,7 +77,7 @@ stages:
       vmImage: $(vmImageName)
     steps:
     - task: AzureWebAppContainer@1
-      inputs:
+      inputs:    
         azureSubscription: '$(azureSubscriptionName)'
         appName: '$(applicationName)'
         containers: '$(dockerRegistryUrl)/$(imageRepository):$(tag)'
