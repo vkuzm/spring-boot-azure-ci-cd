@@ -36,6 +36,8 @@ stages:
           SonarCloud: 'azure-springboot'
           organization: 'vkuzm'
           scannerMode: 'Other'
+          extraProperties: |
+                sonar.projectKey=vkuzm_spring-boot-github-ci-cd
           
       #3 Analyze the project by SonarCloud
       - task: SonarCloudAnalyze@1
