@@ -9,7 +9,7 @@ trigger:
 variables:
   mavenPomFile: 'pom.xml'
   jdkVersion: '1.11'
-  dockerRegistry: 'azurespringbootcontainertest.azurecr.io'
+  dockerRegistry: 'azurespringbootcontainertest'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   imageRepository: 'springbootapp'
   tag: '$(Build.BuildId)'
