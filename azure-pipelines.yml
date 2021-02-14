@@ -31,11 +31,11 @@ stages:
           goals: 'test'
       
       #2 Run code analyzer
-      ###
+      
 
 - stage: build_and_publish
   dependsOn: test
-  # Run this stage if previous stage(s) succeeded and build reason ISN'T a pull request
+  # Run this stage if previous stage(s) succeeded and build reason is not a pull request
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   jobs:
   - job: build_and_publish_job
