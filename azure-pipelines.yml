@@ -9,6 +9,8 @@ trigger:
 variables:
   mavenPomFile: 'pom.xml'
   jdkVersion: '1.11'
+  applicationName: 'azure-spring-boot-ci-cd'
+  azureSubscriptionName: 'Azure subscription 1'
   dockerRegistry: 'azurespringbootcontainertest'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   imageRepository: 'springbootapp'
@@ -23,13 +25,20 @@ stages:
   - job: run_tests_job
     steps:
 
-      #1 Run tests and analyze code by SonarCloud
+      #1 Run tests
       - task: Maven@3
         inputs:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
-          goals: 'verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
-      
+          goals: 'verify mvn sonar:sonar'
+
+      #2 Run analyze code by SonarCloud
+      - task: Maven@3
+        inputs:
+          mavenPomFile: $(mavenPomFile)
+          jdkVersionOption: $(jdkVersion)
+          goals: 'sonar:sonar'
+          
 
 - stage: build_and_publish
   dependsOn: test
@@ -59,9 +68,15 @@ stages:
           tags: |
             $(tag)
 
-      #3 Deploy the container
-      # - task: PublishBuildArtifacts@1
-      #   displayName: 'Publish Artifact: drop'
-      #   inputs:
-      #     PathtoPublish: '$(build.artifactstagingdirectory)'
-      #   condition: succeededOrFailed()
+- stage: deploy
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: AzureWebAppContainer@1
+      inputs:
+        azureSubscription: '$(azureSubscriptionName)'
+        appName: '$(applicationName)'
+        containers: '$(dockerRegistry)/$(imageRepository):$(tag)'
