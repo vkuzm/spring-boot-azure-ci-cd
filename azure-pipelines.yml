@@ -14,6 +14,7 @@ variables:
   dockerRegistry: 'azurespringbootcontainertest'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   imageRepository: 'springbootapp'
+  dockerRegistryUrl: '${dockerRegistry}.azurecr.io'
   tag: '$(Build.BuildId)'
 
 pool:
@@ -38,7 +39,7 @@ stages:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
           goals: 'sonar:sonar'
-          
+
 
 - stage: build_and_publish
   dependsOn: test
@@ -79,4 +80,4 @@ stages:
       inputs:
         azureSubscription: '$(azureSubscriptionName)'
         appName: '$(applicationName)'
-        containers: '$(dockerRegistry)/$(imageRepository):$(tag)'
+        containers: '$(dockerRegistryUrl)/$(imageRepository):$(tag)'
