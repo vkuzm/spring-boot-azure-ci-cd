@@ -28,7 +28,7 @@ stages:
         inputs:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
-          goals: 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+          goals: 'verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
       
 
 - stage: build_and_publish
