@@ -11,6 +11,7 @@ variables:
   jdkVersion: '1.11'
   dockerRegistry: 'azurespringbootcontainertest.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  imageRepository: 'springbootapp'
   tag: '$(Build.BuildId)'
 
 pool:
