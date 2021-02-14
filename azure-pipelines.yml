@@ -30,8 +30,21 @@ stages:
           jdkVersionOption: $(jdkVersion)
           goals: 'test'
       
-      #2 Run code analyzer
-      
+      #2 Config SonarCloud
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: 'azure-springboot'
+          organization: 'vkuzm'
+          scannerMode: 'Other'
+          
+      #3 Analyze the project by SonarCloud
+      - task: SonarCloudAnalyze@1
+
+      #4 Publish results to SonarCloud
+      - task: SonarCloudPublish@1
+        inputs:
+          pollingTimeoutSec: '300'
+
 
 - stage: build_and_publish
   dependsOn: test
