@@ -27,6 +27,11 @@ stages:
     steps:
 
       #1 Run tests
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: 'azure-springboot'
+          organization: 'vkuzm'
+          scannerMode: 'Other'
       - task: Maven@3
         displayName: Run tests
         inputs:
@@ -35,11 +40,6 @@ stages:
           goals: 'clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
 
       #2 Run analyze code by SonarCloud
-      - task: SonarCloudPrepare@1
-        inputs:
-          SonarCloud: 'azure-springboot'
-          organization: 'vkuzm'
-          scannerMode: 'Other'
       - task: SonarCloudPublish@1
       
 
