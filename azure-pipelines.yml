@@ -31,10 +31,13 @@ stages:
         inputs:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
-          goals: 'verify sonar:sonar'
+          goals: 'test'
 
       #2 Run analyze code by SonarCloud
       - task: Maven@3
+        env:
+         GITHUB_TOKEN: ${GITHUB_TOKEN}  # Needed to get PR information, if any
+         SONAR_TOKEN: ${SONAR_TOKEN}
         inputs:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
