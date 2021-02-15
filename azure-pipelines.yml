@@ -40,9 +40,6 @@ stages:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
           goals: 'clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
-
-      #2 Push results to Azure build results
-      - task: SonarCloudPublish@1
       
 
 - stage: Build
