@@ -26,12 +26,14 @@ stages:
   - job: test_job
     steps:
 
-      #1 Run tests
+      #1 Config SonarCloud
       - task: SonarCloudPrepare@1
         inputs:
           SonarCloud: 'azure-springboot'
           organization: 'vkuzm'
           scannerMode: 'Other'
+
+      #2 Run tests and SonarCloud
       - task: Maven@3
         displayName: Run tests
         inputs:
@@ -39,7 +41,7 @@ stages:
           jdkVersionOption: $(jdkVersion)
           goals: 'clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
 
-      #2 Run analyze code by SonarCloud
+      #2 Push results to Azure build results
       - task: SonarCloudPublish@1
       
 
