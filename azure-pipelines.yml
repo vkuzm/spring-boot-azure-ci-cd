@@ -37,7 +37,7 @@ stages:
       #2 Run analyze code by SonarCloud
       - task: SonarCloudPrepare@1
         inputs:
-          SonarCloud: 'sonarcloud'
+          SonarCloud: 'azure-springboot'
           organization: 'vkuzm'
           scannerMode: 'Other'
       - task: Maven@3
