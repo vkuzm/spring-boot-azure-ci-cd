@@ -32,19 +32,27 @@ stages:
         inputs:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
-          goals: 'test'
+          goals: 'clean verify'
 
       #2 Run analyze code by SonarCloud
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: 'sonarcloud'
+          organization: 'vkuzm'
+          scannerMode: 'Other'
       - task: Maven@3
-        displayName: Run sonar
-        env:
-         GITHUB_TOKEN: ${GITHUB_TOKEN}  # Needed to get PR information, if any
-         SONAR_TOKEN: ${SONAR_TOKEN}
         inputs:
           mavenPomFile: $(mavenPomFile)
+          goals: 'sonar:sonar'
+          publishJUnitResults: true
+          #testResultsFiles: '**/surefire-reports/TEST-*.xml'
+          #codeCoverageToolOption: JaCoCo
+          javaHomeOption: 'JDKVersion'
           jdkVersionOption: $(jdkVersion)
-          goals: 'org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
-
+          mavenVersionOption: 'Default'
+      - task: SonarCloudAnalyze@1
+      - task: SonarCloudPublish@1
+      
 
 - stage: Build
   dependsOn: test
