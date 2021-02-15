@@ -14,7 +14,7 @@ variables:
   dockerRegistry: 'azurespringbootcontainertest'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   imageRepository: 'springbootapp'
-  dockerRegistryUrl: '${dockerRegistry}.azurecr.io'
+  dockerRegistryUrl: 'azurespringbootcontainertest.azurecr.io'
   tag: '$(Build.BuildId)'
 
 pool:
