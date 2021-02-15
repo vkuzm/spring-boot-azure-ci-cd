@@ -75,8 +75,6 @@ stages:
 - stage: Deploy
   jobs:
   - job: deploy_job
-    pool:
-      vmImage: $(vmImageName)
     steps:
     - task: AzureWebAppContainer@1
       inputs:    
