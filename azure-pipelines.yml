@@ -10,7 +10,7 @@ variables:
   mavenPomFile: 'pom.xml'
   jdkVersion: '1.11'
   applicationName: 'azure-spring-boot-ci-cd'
-  azureSubscriptionName: 'azure-subscription-1'
+  azureSubscriptionName: 'azure-springboot-subscribtion'
   dockerRegistry: 'azurespringbootcontainertest'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   imageRepository: 'springbootapp'
