@@ -32,7 +32,7 @@ stages:
         inputs:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
-          goals: 'clean verify'
+          goals: 'clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
 
       #2 Run analyze code by SonarCloud
       - task: SonarCloudPrepare@1
@@ -40,17 +40,6 @@ stages:
           SonarCloud: 'azure-springboot'
           organization: 'vkuzm'
           scannerMode: 'Other'
-      - task: Maven@3
-        inputs:
-          mavenPomFile: $(mavenPomFile)
-          goals: 'sonar:sonar'
-          publishJUnitResults: true
-          #testResultsFiles: '**/surefire-reports/TEST-*.xml'
-          #codeCoverageToolOption: JaCoCo
-          javaHomeOption: 'JDKVersion'
-          jdkVersionOption: $(jdkVersion)
-          mavenVersionOption: 'Default'
-      - task: SonarCloudAnalyze@1
       - task: SonarCloudPublish@1
       
 
