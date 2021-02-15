@@ -43,7 +43,7 @@ stages:
       
 
 - stage: Build
-  dependsOn: test
+  dependsOn: Test
   # Run this stage if previous stage(s) succeeded and build reason is not a pull request
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   jobs:
@@ -72,6 +72,7 @@ stages:
             $(tag)
 
 - stage: Deploy
+  dependsOn: Build
   jobs:
   - job: deploy_job
     steps:
