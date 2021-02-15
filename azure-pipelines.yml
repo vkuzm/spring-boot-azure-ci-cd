@@ -21,9 +21,9 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-- stage: test
+- stage: Test
   jobs:
-  - job: run_tests_job
+  - job: test_job
     steps:
 
       #1 Run tests
@@ -41,12 +41,12 @@ stages:
           goals: 'sonar:sonar'
 
 
-- stage: build
+- stage: Build
   dependsOn: test
   # Run this stage if previous stage(s) succeeded and build reason is not a pull request
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   jobs:
-  - job: build
+  - job: build_job
     continueOnError: 'false'
     steps:
 
@@ -69,9 +69,9 @@ stages:
           tags: |
             $(tag)
 
-- stage: deploy
+- stage: Deploy
   jobs:
-  - job: Deploy
+  - job: deploy_job
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
