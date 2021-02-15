@@ -28,6 +28,7 @@ stages:
 
       #1 Run tests
       - task: Maven@3
+        displayName: Run tests
         inputs:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
@@ -35,13 +36,14 @@ stages:
 
       #2 Run analyze code by SonarCloud
       - task: Maven@3
+        displayName: Run sonar
         env:
          GITHUB_TOKEN: ${GITHUB_TOKEN}  # Needed to get PR information, if any
          SONAR_TOKEN: ${SONAR_TOKEN}
         inputs:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
-          goals: 'sonar:sonar'
+          goals: 'org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
 
 
 - stage: Build
@@ -55,6 +57,7 @@ stages:
 
       #1 Build the app
       - task: Maven@3
+        displayName: Build project
         inputs:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
@@ -75,7 +78,6 @@ stages:
 - stage: Deploy
   jobs:
   - job: deploy_job
-    displayName: Deploy
     pool:
       vmImage: $(vmImageName)
     steps:
