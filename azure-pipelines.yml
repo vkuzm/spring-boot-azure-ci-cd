@@ -31,7 +31,7 @@ stages:
         inputs:
           mavenPomFile: $(mavenPomFile)
           jdkVersionOption: $(jdkVersion)
-          goals: 'verify mvn sonar:sonar'
+          goals: 'verify sonar:sonar'
 
       #2 Run analyze code by SonarCloud
       - task: Maven@3
@@ -41,12 +41,12 @@ stages:
           goals: 'sonar:sonar'
 
 
-- stage: build_and_publish
+- stage: build
   dependsOn: test
   # Run this stage if previous stage(s) succeeded and build reason is not a pull request
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   jobs:
-  - job: build_and_publish_job
+  - job: build
     continueOnError: 'false'
     steps:
 
